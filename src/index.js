@@ -5,14 +5,18 @@ import 'regenerator-runtime/runtime';
 
 import '../assets/application.scss';
 
-// import faker from 'faker';
+import faker from 'faker';
 import gon from 'gon';
-// import cookies from 'js-cookie';
-// import io from 'socket.io-client';
+import Cookies from 'js-cookie';
+import io from 'socket.io-client';
 
-import React from 'react';
+import { configureStore } from '@reduxjs/toolkit';
 import ReactDOM from 'react-dom';
-import Channels from './channels';
+
+import rootReducer from './reducers';
+import getApp from './main';
+
+import { newMessage } from './features/messages/messagesSlice';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -21,8 +25,19 @@ if (process.env.NODE_ENV !== 'production') {
 console.log('it works!');
 console.log('gon', gon);
 
-const { channels } = gon;
-console.log('channels', channels);
-const channelList = React.createElement(Channels, { channels });
-const container = document.querySelector('.container');
-ReactDOM.render(channelList, container);
+const userName = faker.name.findName();
+Cookies.set('username', userName);
+
+const store = configureStore({
+  reducer: rootReducer,
+  preloadedState: gon,
+});
+
+const socket = io();
+socket.on('connect', () => console.log('Connect OK'));
+socket.on('newMessage', (msg) => {
+  store.dispatch(newMessage(msg.data));
+});
+
+const container = document.querySelector('.container-lg');
+ReactDOM.render(getApp(store), container);
