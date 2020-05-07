@@ -6,7 +6,7 @@ import NewMessageForm from './NewMessageForm';
 
 const UsernameContext = React.createContext(Cookies.get('username'));
 
-export default function App(props) {
+const App = (props) => {
   const { channels, messages, currentChannelId } = props;
 
   return (
@@ -26,4 +26,6 @@ export default function App(props) {
       </div>
     </div>
   );
-}
+};
+
+export default App;

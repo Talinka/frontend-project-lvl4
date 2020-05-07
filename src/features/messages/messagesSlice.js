@@ -38,6 +38,7 @@ export const addMessage = (text, username, channelId) => async (dispatch) => {
     dispatch(addMessageSuccess(response.data));
   } catch (error) {
     dispatch(addMessageFailure(error.message));
+    throw (error);
   }
 };
 

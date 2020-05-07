@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 
@@ -17,11 +17,15 @@ const mapStateToProps = (state) => ({
 });
 
 function MessageBox(props) {
-  console.log('props', props);
   const { messages } = props;
   if (messages.length === 0) {
     return null;
   }
+
+  const boxRef = createRef();
+  useEffect(() => {
+    boxRef.current.scrollTo(0, boxRef.current.scrollHeight);
+  });
 
   const messageItems = messages.map(({ id, body, username }) => (
     <div key={id}>
@@ -32,7 +36,7 @@ function MessageBox(props) {
   ));
 
   return (
-    <div id="messages-box" className="chat-messages overflow-auto mb-3">
+    <div id="messages-box" className="chat-messages overflow-auto mb-3" ref={boxRef}>
       {messageItems}
     </div>
   );
