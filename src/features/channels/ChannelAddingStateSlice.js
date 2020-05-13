@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { addChannelStart, addChannelSuccess, addChannelFailure } from './channelsSlice';
 
 const channelAddingStateSlice = createSlice({
-  name: 'messageAddingState',
+  name: 'channelAddingState',
   initialState: { adding: false, error: null },
   reducers: {},
   extraReducers: {

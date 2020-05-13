@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, createRef } from 'react';
 import { connect } from 'react-redux';
-// import { useFormik } from 'formik';
-// import { Modal, FormGroup, FormControl } from 'react-bootstrap';
+import { useFormik } from 'formik';
+import {
+  Modal, FormControl, Button, Form, Spinner,
+} from 'react-bootstrap';
 import { addChannel } from '../../features/channels/channelsSlice';
 
 const mapStateToProps = (state) => ({
@@ -10,44 +12,54 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { addNewChannel: addChannel };
 
-const AddChannel = () => {
-/*
-  const { addNewChannel } = props;
+const AddChannel = (props) => {
+  const { addNewChannel, hideModal, channelAddingState } = props;
 
   const formik = useFormik({
-      initialValues: { name: '' },
-      onSubmit: (values) => {
-        addNewChannel(values.name);
-      },
-    });
-*/
-  const textInput = useRef(null);
-  useEffect(() => textInput.current.focus());
+    initialValues: { name: '' },
+    onSubmit: async (values) => {
+      await addNewChannel(values.name);
+      hideModal();
+    },
+  });
+
+  const inputRef = createRef();
+  useEffect(() => inputRef.current.focus());
 
   return (
-    /*
-    <Modal.Dialog>
-      <Modal.Header closeButton onClick={onClose}>
-        <Modal.Title>Add</Modal.Title>
+    <Modal show onHide={hideModal} animation={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add channel</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
-          <FormGroup>
-            <FormControl
-              name="name"
-              required
-              ref={textInput}
-              onChange={formik.handleChange}
-              value={formik.values.name}
-            />
-          </FormGroup>
-          <input className="btn btn-primary" type="submit" value="submit" />
+          <Form.Label>Input channel name:</Form.Label>
+          <FormControl
+            name="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            disabled={channelAddingState.adding}
+            ref={inputRef}
+          />
         </form>
       </Modal.Body>
-    </Modal.Dialog>
-    */
-    <>
-    </>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={hideModal} disabled={channelAddingState.adding}>
+          Close
+        </Button>
+        <Button variant="primary" type="submit" disabled={channelAddingState.adding}>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+            className={channelAddingState.adding ? 'd-inline-block' : 'd-none'}
+          />
+          {channelAddingState.adding ? 'Adding...' : 'Add'}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

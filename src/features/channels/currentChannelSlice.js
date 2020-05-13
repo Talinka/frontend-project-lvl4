@@ -1,12 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { removeChannelSuccess } from './channelsSlice';
 
 const currentChannelSlice = createSlice({
   name: 'currentChannel',
-  initialState: 0,
+  initialState: 1,
   reducers: {
     changeCurrentChannel(state, action) {
       return action.payload;
     },
+  },
+  extraReducers: {
+    [removeChannelSuccess]: (state, action) => (
+      (state === action.payload) ? 1 : state
+    ),
   },
 });
 

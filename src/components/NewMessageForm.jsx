@@ -1,8 +1,10 @@
-import React, { createRef, useEffect } from 'react';
+import React, { createRef, useEffect, useContext } from 'react';
+import { FormControl } from 'react-bootstrap';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import { addMessage } from '../features/messages/messagesSlice';
+import UsernameContext from '../context';
 
 const mapStateToProps = (state) => ({
   currentChannelId: state.currentChannelId,
@@ -13,8 +15,10 @@ const mapDispatchToProps = { add: addMessage };
 
 const NewMessageForm = (props) => {
   const {
-    add, currentChannelId, username, messageAddingState,
+    add, currentChannelId, messageAddingState,
   } = props;
+
+  const username = useContext(UsernameContext);
 
   const formik = useFormik({
     initialValues: { body: '' },
@@ -43,7 +47,8 @@ const NewMessageForm = (props) => {
       <form noValidate onSubmit={formik.handleSubmit}>
         <div className="form-group">
           <div className="input-group">
-            <input
+            <FormControl
+              required
               name="body"
               ref={inputRef}
               className={inputClassNames}

@@ -9,7 +9,7 @@ const messageAddingStateSlice = createSlice({
   reducers: {},
   extraReducers: {
     [addMessageStart]: (state) => {
-      state.addingS = true;
+      state.adding = true;
       state.error = null;
     },
     [addMessageSuccess]: (state) => {
