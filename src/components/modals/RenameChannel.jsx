@@ -14,14 +14,19 @@ const mapDispatchToProps = { renameCurrentChannel: renameChannel };
 
 const RenameChannel = (props) => {
   const {
-    item, renameCurrentChannel, hideModal, channelRenamingState,
+    item, renameCurrentChannel, showModal, hideModal, channelRenamingState,
   } = props;
 
   const formik = useFormik({
     initialValues: { name: item.name },
     onSubmit: async (values) => {
-      await renameCurrentChannel(item.id, values.name);
-      hideModal();
+      try {
+        await renameCurrentChannel(item.id, values.name);
+        hideModal();
+      } catch (error) {
+        const message = `Error occured when renaming channel ${item.name}. ${error.message}`;
+        showModal('error', { message });
+      }
     },
   });
 

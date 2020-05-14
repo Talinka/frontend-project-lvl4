@@ -51,6 +51,7 @@ export const addChannel = (name) => async (dispatch) => {
   } catch (error) {
     console.error(`Can't create the channel. ${error.message}`);
     dispatch(addChannelFailure(error.message));
+    throw error;
   }
 };
 
@@ -62,6 +63,7 @@ export const removeChannel = (id) => async (dispatch) => {
   } catch (error) {
     console.error(`Can't delete the channel. ${error.message}`);
     dispatch(removeChannelFailure(error.message));
+    throw error;
   }
 };
 
@@ -79,6 +81,7 @@ export const renameChannel = (id, name) => async (dispatch) => {
   } catch (error) {
     console.error(`Can't rename the channel. ${error.message}`);
     dispatch(renameChannelFailure(error.message));
+    throw error;
   }
 };
 

@@ -17,7 +17,7 @@ const messageAddingStateSlice = createSlice({
       state.error = null;
     },
     [addMessageFailure]: (state, action) => {
-      state.addingState = false;
+      state.adding = false;
       state.error = action.payload;
     },
   },

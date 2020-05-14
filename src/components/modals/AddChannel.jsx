@@ -13,13 +13,20 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = { addNewChannel: addChannel };
 
 const AddChannel = (props) => {
-  const { addNewChannel, hideModal, channelAddingState } = props;
+  const {
+    addNewChannel, hideModal, showModal, channelAddingState,
+  } = props;
 
   const formik = useFormik({
     initialValues: { name: '' },
     onSubmit: async (values) => {
-      await addNewChannel(values.name);
-      hideModal();
+      try {
+        await addNewChannel(values.name);
+        hideModal();
+      } catch (error) {
+        const message = `Error occured when adding channel ${values.name}. ${error.message}`;
+        showModal('error', { message });
+      }
     },
   });
 

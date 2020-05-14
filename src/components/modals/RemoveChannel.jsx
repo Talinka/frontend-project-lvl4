@@ -14,13 +14,18 @@ const mapDispatchToProps = { removeCurrentChannel: removeChannel, changeCurrentC
 
 const RemoveChannel = (props) => {
   const {
-    item, removeCurrentChannel, hideModal, channelRemovingState,
+    item, removeCurrentChannel, showModal, hideModal, channelRemovingState,
   } = props;
 
   const handleRemove = async () => {
-    await removeCurrentChannel(item.id);
-    props.changeCurrentChannel();
-    hideModal();
+    try {
+      await removeCurrentChannel(item.id);
+      props.changeCurrentChannel();
+      hideModal();
+    } catch (error) {
+      const message = `Error occured when removing channel ${item.name}. ${error.message}`;
+      showModal('error', { message });
+    }
   };
 
   const text = `Do you want to remove channel ${item.name}?`;

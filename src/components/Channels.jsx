@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from 'classnames';
+import { Nav, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { changeCurrentChannel } from '../features/channels/currentChannelSlice';
 
@@ -17,55 +17,35 @@ function Channels(props) {
 
   const currentChannel = channels.find(({ id }) => id === currentChannelId);
 
-  const channelItems = channels.map(({ id, name }) => {
-    const classes = cn(
-      'nav-link btn btn-block',
-      { active: id === currentChannelId },
-    );
-    return (
-      <li key={id} className="nav-item">
-        <button
-          type="button"
-          className={classes}
-          onClick={() => changeChannel(id)}
-        >
-          {name}
-        </button>
-      </li>
-    );
-  });
+  const channelItems = channels.map(({ id, name }) => (
+    <Nav.Item key={id} as="li">
+      <Nav.Link
+        className={id === currentChannelId ? 'active' : ''}
+        onClick={() => changeChannel(id)}
+      >
+        {name}
+      </Nav.Link>
+    </Nav.Item>
+  ));
 
   return (
     <div className="col-3 border-right">
       <div className="d-flex mb-2">
         <span>Channels</span>
-        <button
-          type="button"
-          // className="btn btn-link p-0 ml-auto"
-          className="btn btn-block sm"
-          onClick={() => showModal('add')}
-        >
-          +
-        </button>
-        <button
-          type="button"
-          className="btn btn-link p-0 ml-auto"
-          disabled={!currentChannel.removable}
-          onClick={() => showModal('remove', currentChannel)}
-        >
-          -
-        </button>
-        <button
-          type="button"
-          className="btn btn-link p-0 ml-auto"
-          onClick={() => showModal('rename', currentChannel)}
-        >
-          %
-        </button>
+        <ButtonGroup className="ml-auto">
+          <Button className="button-add" variant="link" onClick={() => showModal('add')} />
+          <Button
+            className="button-delete"
+            variant="link"
+            disabled={!currentChannel.removable}
+            onClick={() => showModal('remove', currentChannel)}
+          />
+          <Button className="button-change" variant="link" onClick={() => showModal('rename', currentChannel)} />
+        </ButtonGroup>
       </div>
-      <ul className="nav flex-column nav-pills nav-fill">
+      <Nav as="ul" fill variant="pills" className="flex-column">
         {channelItems}
-      </ul>
+      </Nav>
     </div>
   );
 }

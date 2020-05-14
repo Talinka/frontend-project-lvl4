@@ -1,6 +1,5 @@
 import React, { createRef, useEffect, useContext } from 'react';
-import { FormControl } from 'react-bootstrap';
-import classNames from 'classnames';
+import { Form, FormControl } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import { addMessage } from '../features/messages/messagesSlice';
@@ -32,11 +31,6 @@ const NewMessageForm = (props) => {
     },
   });
 
-  const inputClassNames = classNames(
-    'form-control',
-    { 'is-invalid': messageAddingState.error },
-  );
-
   const inputRef = createRef();
   useEffect(() => {
     inputRef.current.focus();
@@ -44,14 +38,14 @@ const NewMessageForm = (props) => {
 
   return (
     <div className="mt-auto">
-      <form noValidate onSubmit={formik.handleSubmit}>
+      <Form noValidate onSubmit={formik.handleSubmit}>
         <div className="form-group">
           <div className="input-group">
             <FormControl
               required
               name="body"
               ref={inputRef}
-              className={inputClassNames}
+              className={messageAddingState.error ? 'is-invalid' : ''}
               value={formik.values.body}
               onChange={formik.handleChange}
               disabled={messageAddingState.adding}
@@ -61,7 +55,7 @@ const NewMessageForm = (props) => {
             </div>
           </div>
         </div>
-      </form>
+      </Form>
     </div>
   );
 };

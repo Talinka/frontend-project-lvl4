@@ -16,7 +16,7 @@ const App = () => {
       return null;
     }
     const Component = getModal(modalInfo.type);
-    return <Component hideModal={hideModal} item={modalInfo.item} />;
+    return <Component hideModal={hideModal} showModal={showModal} item={modalInfo.item} />;
   };
 
   return (
