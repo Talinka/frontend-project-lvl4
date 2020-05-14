@@ -1,5 +1,5 @@
 import React, { createRef, useEffect, useContext } from 'react';
-import { Form, FormControl } from 'react-bootstrap';
+import { Form, FormControl, InputGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import { addMessage } from '../features/messages/messagesSlice';
@@ -39,8 +39,8 @@ const NewMessageForm = (props) => {
   return (
     <div className="mt-auto">
       <Form noValidate onSubmit={formik.handleSubmit}>
-        <div className="form-group">
-          <div className="input-group">
+        <Form.Group>
+          <InputGroup>
             <FormControl
               required
               name="body"
@@ -50,11 +50,11 @@ const NewMessageForm = (props) => {
               onChange={formik.handleChange}
               disabled={messageAddingState.adding}
             />
-            <div className="d-block invalid-feedback">
+            <Form.Control.Feedback type="invalid">
               {messageAddingState.error}
-            </div>
-          </div>
-        </div>
+            </Form.Control.Feedback>
+          </InputGroup>
+        </Form.Group>
       </Form>
     </div>
   );

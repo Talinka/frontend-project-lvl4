@@ -39,7 +39,7 @@ const AddChannel = (props) => {
         <Modal.Title>Add channel</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form onSubmit={formik.handleSubmit}>
+        <Form onSubmit={formik.handleSubmit}>
           <Form.Label>Input channel name:</Form.Label>
           <FormControl
             name="name"
@@ -48,7 +48,7 @@ const AddChannel = (props) => {
             disabled={channelAddingState.adding}
             ref={inputRef}
           />
-        </form>
+        </Form>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={hideModal} disabled={channelAddingState.adding}>

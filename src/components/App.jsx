@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import Cookies from 'js-cookie';
 import Channels from './Channels';
 import MessageBox from './MessageBox';
@@ -22,16 +23,16 @@ const App = () => {
   return (
     <UsernameContext.Provider value={Cookies.get('username')}>
       <div className="h-100" id="chat">
-        <div className="row h-100 pb-3">
+        <Row className="pb-3">
           <Channels showModal={showModal} />
           {renderModal()}
-          <div className="col h-100">
-            <div className="d-flex flex-column h-100">
+          <Col>
+            <Col>
               <MessageBox />
               <NewMessageForm />
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Col>
+        </Row>
       </div>
     </UsernameContext.Provider>
   );

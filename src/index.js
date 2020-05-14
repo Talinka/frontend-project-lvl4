@@ -17,6 +17,7 @@ import rootReducer from './reducers';
 import getApp from './main';
 
 import { newMessage } from './features/messages/messagesSlice';
+import usernameContext from './context';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -38,6 +39,7 @@ socket.on('connect', () => console.log('Connect OK'));
 socket.on('newMessage', (msg) => {
   store.dispatch(newMessage(msg.data));
 });
+// TODO
 
 const container = document.querySelector('.container-lg');
 ReactDOM.render(getApp(store), container);
