@@ -23,14 +23,14 @@ const App = () => {
   return (
     <UsernameContext.Provider value={Cookies.get('username')}>
       <div className="h-100" id="chat">
-        <Row className="pb-3">
+        <Row className="pb-3 h-100">
           <Channels showModal={showModal} />
           {renderModal()}
-          <Col>
-            <Col>
+          <Col className="h-100">
+            <div className="d-flex flex-column h-100">
               <MessageBox />
               <NewMessageForm />
-            </Col>
+            </div>
           </Col>
         </Row>
       </div>
