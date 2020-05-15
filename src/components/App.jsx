@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import Cookies from 'js-cookie';
 import Channels from './Channels';
 import MessageBox from './MessageBox';

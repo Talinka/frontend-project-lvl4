@@ -22,12 +22,8 @@ const NewMessageForm = (props) => {
   const formik = useFormik({
     initialValues: { body: '' },
     onSubmit: async (values, { resetForm }) => {
-      try {
-        await add(values.body, username, currentChannelId);
-        resetForm();
-      } catch (error) {
-        console.error(error.message);
-      }
+      await add(values.body, username, currentChannelId);
+      resetForm();
     },
   });
 
