@@ -61,7 +61,7 @@ const RenameChannel = (props) => {
           />
         </Modal.Footer>
       </form>
-    </Modal >
+    </Modal>
   );
 };
 
