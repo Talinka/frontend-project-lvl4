@@ -1,7 +1,7 @@
 import React from 'react';
 import { Nav, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { changeCurrentChannel } from '../features/channels/currentChannelSlice';
+import { changeCurrentChannel } from '../slices/currentChannelSlice';
 
 const mapStateToProps = (state) => ({
   channels: state.channels,

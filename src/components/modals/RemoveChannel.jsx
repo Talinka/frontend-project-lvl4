@@ -1,29 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import {
-  Modal, Button, Spinner,
-} from 'react-bootstrap';
-import { removeChannel } from '../../features/channels/channelsSlice';
-import { changeCurrentChannel } from '../../features/channels/currentChannelSlice';
+import { Modal, Button } from 'react-bootstrap';
+import { removeChannel } from '../../slices/channelsSlice';
+import { changeCurrentChannel } from '../../slices/currentChannelSlice';
+import SubmitButton from './SubmitButton';
 
-const mapStateToProps = (state) => ({
-  channelRemovingState: state.channelRemovingState,
-});
-
-const mapDispatchToProps = { removeCurrentChannel: removeChannel, changeCurrentChannel };
+const mapDispatchToProps = { removeChannel, changeCurrentChannel };
 
 const RemoveChannel = (props) => {
   const {
-    item, removeCurrentChannel, showModal, hideModal, channelRemovingState,
+    item, showModal, hideModal,
   } = props;
-
-  const handleRemove = async () => {
+  const [isSubmitting, setSubmitting] = useState(false);
+  const onSubmit = async () => {
     try {
-      await removeCurrentChannel(item.id);
+      setSubmitting(true);
+      await props.removeChannel(item.id);
       props.changeCurrentChannel();
       hideModal();
     } catch (error) {
+      setSubmitting(false);
       const message = `Error occured when removing channel ${item.name}. ${error.message}`;
+      console.error(message);
       showModal('error', { message });
     }
   };
@@ -39,26 +37,16 @@ const RemoveChannel = (props) => {
         <p>{text}</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={hideModal} disabled={channelRemovingState.removing}>
+        <Button variant="secondary" onClick={hideModal} disabled={isSubmitting}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleRemove} disabled={channelRemovingState.removing}>
-          <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-            className={channelRemovingState.removing ? 'd-inline-block' : 'd-none'}
-          />
-          {channelRemovingState.removing ? 'Removing...' : 'Remove'}
-        </Button>
+        <SubmitButton onClick={onSubmit} isSubmitting={isSubmitting} text="Remove" submittingText="Removing..." />
       </Modal.Footer>
     </Modal>
   );
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(RemoveChannel);

@@ -2,19 +2,16 @@ import React, { useEffect, createRef } from 'react';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import {
-  Modal, FormControl, Button, Form, Spinner,
+  Modal, FormControl, Button, Form,
 } from 'react-bootstrap';
-import { renameChannel } from '../../features/channels/channelsSlice';
-
-const mapStateToProps = (state) => ({
-  channelRenamingState: state.channelRenamingState,
-});
+import { renameChannel } from '../../slices/channelsSlice';
+import SubmitButton from './SubmitButton';
 
 const mapDispatchToProps = { renameCurrentChannel: renameChannel };
 
 const RenameChannel = (props) => {
   const {
-    item, renameCurrentChannel, showModal, hideModal, channelRenamingState,
+    item, renameCurrentChannel, showModal, hideModal,
   } = props;
 
   const formik = useFormik({
@@ -25,6 +22,7 @@ const RenameChannel = (props) => {
         hideModal();
       } catch (error) {
         const message = `Error occured when renaming channel ${item.name}. ${error.message}`;
+        console.error(message);
         showModal('error', { message });
       }
     },
@@ -38,39 +36,36 @@ const RenameChannel = (props) => {
       <Modal.Header closeButton>
         <Modal.Title>Rename channel</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
+        <Modal.Body>
+
           <Form.Label>Input new channel name:</Form.Label>
           <FormControl
             name="name"
             value={formik.values.name}
             onChange={formik.handleChange}
-            disabled={channelRenamingState.renaming}
+            disabled={formik.isSubmitting}
             ref={inputRef}
           />
-        </form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={hideModal} disabled={channelRenamingState.renaming}>
-          Close
-        </Button>
-        <Button variant="primary" type="submit" disabled={channelRenamingState.renaming}>
-          <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-            className={channelRenamingState.renaming ? 'd-inline-block' : 'd-none'}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={hideModal} disabled={formik.isSubmitting}>
+            Close
+          </Button>
+          <SubmitButton
+            type="submit"
+            disabled={formik.isSubmitting || !formik.dirty}
+            isSubmitting={formik.isSubmitting}
+            text="Rename"
+            submittingText="Renaming..."
           />
-          {channelRenamingState.renaming ? 'Renaming...' : 'Rename'}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        </Modal.Footer>
+      </form>
+    </Modal >
   );
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(RenameChannel);

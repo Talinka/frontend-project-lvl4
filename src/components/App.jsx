@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import Cookies from 'js-cookie';
 import Channels from './Channels';
 import MessageBox from './MessageBox';
 import NewMessageForm from './NewMessageForm';
 import getModal from './modals';
-import UsernameContext from '../context';
 
 const App = () => {
   const [modalInfo, setModalInfo] = useState({ type: null, value: null });
@@ -21,20 +19,18 @@ const App = () => {
   };
 
   return (
-    <UsernameContext.Provider value={Cookies.get('username')}>
-      <div className="h-100" id="chat">
-        <Row className="pb-3 h-100">
-          <Channels showModal={showModal} />
-          {renderModal()}
-          <Col className="h-100">
-            <div className="d-flex flex-column h-100">
-              <MessageBox />
-              <NewMessageForm />
-            </div>
-          </Col>
-        </Row>
-      </div>
-    </UsernameContext.Provider>
+    <div className="h-100" id="chat">
+      <Row className="pb-3 h-100">
+        <Channels showModal={showModal} />
+        {renderModal()}
+        <Col className="h-100">
+          <div className="d-flex flex-column h-100">
+            <MessageBox />
+            <NewMessageForm />
+          </div>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
