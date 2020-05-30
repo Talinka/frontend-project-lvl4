@@ -1,19 +1,13 @@
 import React from 'react';
 import { Nav, Button, ButtonGroup } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { changeCurrentChannel } from '../slices/currentChannelSlice';
 
-const mapStateToProps = (state) => ({
-  channels: state.channels,
-  currentChannelId: state.currentChannelId,
-});
-
-const mapDispatchToProps = { changeChannel: changeCurrentChannel };
-
-function Channels(props) {
-  const {
-    channels, currentChannelId, changeChannel, showModal,
-  } = props;
+const Channels = (props) => {
+  const channels = useSelector((state) => state.channels);
+  const currentChannelId = useSelector((state) => state.currentChannelId);
+  const dispatch = useDispatch();
+  const { showModal } = props;
 
   const currentChannel = channels.find(({ id }) => id === currentChannelId);
 
@@ -21,7 +15,7 @@ function Channels(props) {
     <Nav.Item key={id} as="li">
       <Nav.Link
         className={id === currentChannelId ? 'active' : ''}
-        onClick={() => changeChannel(id)}
+        onClick={() => dispatch(changeCurrentChannel(id))}
       >
         {name}
       </Nav.Link>
@@ -48,9 +42,6 @@ function Channels(props) {
       </Nav>
     </div>
   );
-}
+};
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Channels);
+export default Channels;

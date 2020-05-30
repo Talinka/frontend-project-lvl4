@@ -1,5 +1,4 @@
 import React, { useEffect, createRef } from 'react';
-import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import {
   Modal, FormControl, Button, Form,
@@ -7,23 +6,20 @@ import {
 import { renameChannel } from '../../slices/channelsSlice';
 import SubmitButton from './SubmitButton';
 
-const mapDispatchToProps = { renameCurrentChannel: renameChannel };
-
 const RenameChannel = (props) => {
   const {
-    item, renameCurrentChannel, showModal, hideModal,
+    item, hideModal, showError,
   } = props;
 
   const formik = useFormik({
     initialValues: { name: item.name },
     onSubmit: async (values) => {
       try {
-        await renameCurrentChannel(item.id, values.name);
+        await renameChannel(item.id, values.name);
         hideModal();
       } catch (error) {
         const message = `Error occured when renaming channel ${item.name}. ${error.message}`;
-        console.error(message);
-        showModal('error', { message });
+        showError(message);
       }
     },
   });
@@ -38,7 +34,6 @@ const RenameChannel = (props) => {
       </Modal.Header>
       <form onSubmit={formik.handleSubmit}>
         <Modal.Body>
-
           <Form.Label>Input new channel name:</Form.Label>
           <FormControl
             name="name"
@@ -65,7 +60,4 @@ const RenameChannel = (props) => {
   );
 };
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(RenameChannel);
+export default RenameChannel;

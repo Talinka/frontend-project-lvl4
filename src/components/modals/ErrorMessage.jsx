@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 const ErrorMessage = (props) => {
-  const { item, hideModal } = props;
+  const { item: message, hideModal } = props;
 
   return (
     <Modal show onHide={hideModal} animation={false}>
@@ -10,7 +10,7 @@ const ErrorMessage = (props) => {
         <Modal.Title className="text-danger">Error</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{item.message}</p>
+        <p>{message}</p>
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={hideModal}>

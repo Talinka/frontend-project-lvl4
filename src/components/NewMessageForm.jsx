@@ -1,33 +1,24 @@
 import React, {
-  createRef, useEffect, useContext, useState,
+  createRef, useEffect, useContext,
 } from 'react';
 import { Form, FormControl, InputGroup } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFormik } from 'formik';
-import { addMessage } from '../slices/messagesSlice';
 import UsernameContext from '../context';
+import { addMessage } from '../slices/messagesSlice';
 
-const mapStateToProps = (state) => ({
-  currentChannelId: state.currentChannelId,
-});
-
-const mapDispatchToProps = { add: addMessage };
-
-const NewMessageForm = (props) => {
-  const { add, currentChannelId } = props;
-  const [error, setError] = useState(null);
-
+const NewMessageForm = () => {
+  const currentChannelId = useSelector((state) => state.currentChannelId);
   const username = useContext(UsernameContext);
 
   const formik = useFormik({
     initialValues: { body: '' },
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async ({ body }, { resetForm, setFieldError }) => {
       try {
-        await add(values.body, username, currentChannelId);
-        setError(null);
+        await addMessage(body, username, currentChannelId);
         resetForm();
       } catch (err) {
-        setError(err.message);
+        setFieldError('body', err.message);
       }
     },
   });
@@ -46,13 +37,13 @@ const NewMessageForm = (props) => {
               required
               name="body"
               ref={inputRef}
-              className={error ? 'is-invalid' : ''}
+              className={formik.errors.body ? 'is-invalid' : ''}
               value={formik.values.body}
               onChange={formik.handleChange}
               disabled={formik.isSubmitting}
             />
             <Form.Control.Feedback type="invalid">
-              {error}
+              {formik.errors.body}
             </Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
@@ -61,7 +52,4 @@ const NewMessageForm = (props) => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(NewMessageForm);
+export default NewMessageForm;

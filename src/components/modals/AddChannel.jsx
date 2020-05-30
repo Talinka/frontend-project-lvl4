@@ -1,5 +1,4 @@
 import React, { useEffect, createRef } from 'react';
-import { connect } from 'react-redux';
 import { useFormik } from 'formik';
 import {
   Modal, FormControl, Button, Form,
@@ -7,29 +6,26 @@ import {
 import { addChannel } from '../../slices/channelsSlice';
 import SubmitButton from './SubmitButton';
 
-const mapDispatchToProps = { addNewChannel: addChannel };
-
 const AddChannel = (props) => {
-  const {
-    addNewChannel, hideModal, showModal,
-  } = props;
+  const { hideModal, showError } = props;
 
   const formik = useFormik({
     initialValues: { name: '' },
     onSubmit: async (values) => {
       try {
-        await addNewChannel(values.name);
+        await addChannel(values.name);
         hideModal();
       } catch (error) {
         const message = `Error occured when adding channel ${values.name}. ${error.message}`;
-        console.error(message);
-        showModal('error', { message });
+        showError(message);
       }
     },
   });
 
   const inputRef = createRef();
-  useEffect(() => inputRef.current.focus());
+  useEffect(() => {
+    inputRef.current.focus();
+  });
 
   return (
     <Modal show onHide={hideModal} animation={false}>
@@ -42,10 +38,10 @@ const AddChannel = (props) => {
             <Form.Label>Input channel name:</Form.Label>
             <FormControl
               name="name"
+              ref={inputRef}
               value={formik.values.name}
               onChange={formik.handleChange}
               disabled={formik.isSubmitting}
-              ref={inputRef}
             />
           </Form.Group>
           <Modal.Footer>
@@ -66,7 +62,4 @@ const AddChannel = (props) => {
   );
 };
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(AddChannel);
+export default AddChannel;

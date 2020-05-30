@@ -7,7 +7,7 @@ const channelsSlice = createSlice({
   initialState: [],
   reducers: {
     addChannelSuccess(state, action) {
-      const { attributes } = action.payload.data;
+      const { attributes } = action.payload;
       state.push(attributes);
     },
     removeChannelSuccess(state, action) {
@@ -15,10 +15,9 @@ const channelsSlice = createSlice({
       return state.filter((channel) => channel.id !== id);
     },
     renameChannelSuccess(state, action) {
-      const { attributes } = action.payload.data;
-      const { id } = attributes;
+      const modifiedChannel = action.payload;
       return state.map((channel) => (
-        channel.id === id ? attributes : channel
+        channel.id === modifiedChannel.id ? modifiedChannel : channel
       ));
     },
   },
@@ -30,32 +29,23 @@ export const {
   renameChannelSuccess,
 } = channelsSlice.actions;
 
-export const addChannel = (name) => async (dispatch) => {
-  const response = await axios.post(routes.channelsPath(), {
-    data: {
-      attributes: {
-        name,
-      },
+export const addChannel = (name) => axios.post(routes.channelsPath(), {
+  data: {
+    attributes: {
+      name,
     },
-  });
-  dispatch(addChannelSuccess(response.data));
-};
+  },
+});
 
-export const removeChannel = (id) => async (dispatch) => {
-  await axios.delete(routes.channelPath(id));
-  dispatch(removeChannelSuccess(id));
-};
+export const removeChannel = (id) => axios.delete(routes.channelPath(id));
 
-export const renameChannel = (id, name) => async (dispatch) => {
-  const response = await axios.patch(routes.channelPath(id), {
-    data: {
-      attributes: {
-        name,
-      },
+
+export const renameChannel = (id, name) => axios.patch(routes.channelPath(id), {
+  data: {
+    attributes: {
+      name,
     },
-  });
-  dispatch(renameChannelSuccess(response.data));
-};
-
+  },
+});
 
 export default channelsSlice.reducer;

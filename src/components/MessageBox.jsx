@@ -1,26 +1,9 @@
 import React, { createRef, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import { selectCurrentMessages } from '../slices/messagesSlice';
 
-const selectMessages = (state) => state.messages;
-const selectCurrentChannelId = (state) => state.currentChannelId;
-
-const selectVisibleMessages = createSelector(
-  [selectMessages, selectCurrentChannelId],
-  (messages, currentChannelId) => messages.filter(
-    ({ channelId }) => channelId === currentChannelId,
-  ),
-);
-
-const mapStateToProps = (state) => ({
-  messages: selectVisibleMessages(state),
-});
-
-function MessageBox(props) {
-  const { messages } = props;
-  if (messages.length === 0) {
-    return null;
-  }
+const MessageBox = () => {
+  const messages = useSelector(selectCurrentMessages);
 
   const boxRef = createRef();
   useEffect(() => {
@@ -40,6 +23,6 @@ function MessageBox(props) {
       {messageItems}
     </div>
   );
-}
+};
 
-export default connect(mapStateToProps)(MessageBox);
+export default MessageBox;
