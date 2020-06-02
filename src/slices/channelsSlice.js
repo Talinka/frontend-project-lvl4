@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+/* eslint no-param-reassign: ["error", { "props": false }] */
+
 import routes from '../routes';
 
 const channelsSlice = createSlice({
@@ -16,9 +18,8 @@ const channelsSlice = createSlice({
     },
     renameChannelSuccess(state, action) {
       const modifiedChannel = action.payload;
-      return state.map((channel) => (
-        channel.id === modifiedChannel.id ? modifiedChannel : channel
-      ));
+      const index = state.findIndex((channel) => channel.id === modifiedChannel.id);
+      state[index] = modifiedChannel;
     },
   },
 });
