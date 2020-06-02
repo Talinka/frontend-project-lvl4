@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
+import { createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import routes from '../routes';
 
 const channelsSlice = createSlice({
